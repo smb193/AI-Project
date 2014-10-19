@@ -48,7 +48,9 @@ bool Game::isBoardFilled()
 bool Game::isValidMove( int x, int y )
 {
     //is it empty?
-    if( board[y][x] != 0 )
+    if   ( ( x >= w ) || ( x < 0 )
+        || ( y >= h ) || ( y < 0 )
+        || ( board[y][x] != 0 ) )
         return false;
 
     //check y directions
