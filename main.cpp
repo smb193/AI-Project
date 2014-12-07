@@ -1,5 +1,7 @@
 #include <Windows.h> // Note, this code only compiles on Windows platforms.
 #include <GL\glut.h>
+#include "gameLogic.h"
+#include <iostream>
 
 const int BLACK = 10; // representation for black player
 const int WHITE = 1; // representatino for white player
@@ -7,16 +9,14 @@ const int WHITE = 1; // representatino for white player
 const GLdouble X = 480, Y = 481; // Size of game window
 const GLfloat BACKGROUND[3] = { 0.0f, 0.5f, 0.0f }; // Color for background of board
 const GLfloat OUTLINE[3] = { 0.0f, 1.0f, 0.0f }; // Color of grid outline
-int board [8][8]; // Array state representation of game board
+Game board; // Array state representation of game board
 int turn; // Represent whose turn it is
 
 void gameStart() { //initializes game board with center four pieces
-	for (int i = 0; i < 8; ++i)
-		for (int j = 0; j < 8; ++j)
-			board[i][j] = 0;
-	board[3][3] = board[4][4] = BLACK; // NE and SW are black
-	board[3][4] = board[4][3] = WHITE; // NW and SE are white
-	turn = BLACK; // Black plays first
+	board = Game();
+	board.board[3][3] = board.board[4][4] = BLACK; // NE and SW are black
+	board.board[3][4] = board.board[4][3] = WHITE; // NW and SE are white
+	board.getMoves();
 }
 
 void init() {
@@ -31,7 +31,7 @@ void init() {
 void drawPieces() {
 	for (int i = 0; i < 8; ++i) {
 		for (int j = 0; j < 8; ++j) {
-			if (board[i][j] == BLACK) { // Draw a black piece
+			if (board.board[i][j] == BLACK) { // Draw a black piece
 				glBegin(GL_POLYGON);
 				glColor3f(0, 0, 0);
 				glVertex2f(60 * i + 20, 60 * j + 50); // v0
@@ -44,7 +44,7 @@ void drawPieces() {
 				glVertex2f(60 * i + 10, 60 * j + 40); // v7
 				glEnd();
 			}
-			else if (board[i][j] == WHITE) { // Draw a white piece
+			else if (board.board[i][j] == WHITE) { // Draw a white piece
 				glBegin(GL_POLYGON);
 				glColor3f(1, 1, 1);
 				glVertex2f(60 * i + 20, 60 * j + 50); // v0
@@ -64,7 +64,7 @@ void drawPieces() {
 void drawBoard() {
 	glBegin(GL_QUADS);
 	glColor3fv(BACKGROUND);
-	glVertex2f(0, 0); glVertex2f(X, 0); glVertex2f(X, X); glVertex2f(0, X); // Makes background distinguishable; important when adding score/turn at later date
+	glVertex2f(0, 0); glVertex2f(X, 0); glVertex2f(X, X); glVertex2f(0, X); // Makes background of board distinguishable; important when adding score/turn UI
 	glEnd();
 
 	glBegin(GL_LINES);
@@ -102,22 +102,18 @@ void idle() {
 }
 
 void mouse(int button, int state, int x, int y) {
-	int indX = x / 60; //Convert pixels to board index;
-	int indY = (Y - y) / 60; //Measures from top-left, so must convert since array draws from bottom right
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		if (board[indX][indY] == 0) {
-			board[indX][indY] = turn;
-			if (turn == BLACK)
-				turn = WHITE;
-			else
-				turn = BLACK;
+	int indX = x / 60; // Convert pixels to board index;
+	int indY = (Y - y) / 60; // Measures from top-left, so must convert since array draws from bottom right
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) { // Detects array position based on where mouse is left-clicked
+		std::cout << "Clicked on: (" << indX << ", " << indY << ")\n";
+		if (board.board[indX][indY] == 0) {
+			board.makeMove(indX, indY);
 		}
 	}
-	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) { // Resets board if right-clicked
 		gameStart();
 	}
 	glutPostRedisplay();
-
 }
 
 int main(int argc, char** argv) {

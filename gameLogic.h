@@ -17,13 +17,12 @@ struct Vector2i
 class Game
 {
 	public:
-		//board[y][x], 0 = empty, 1+ = players
+		//board[x][7], 0 = empty, 1+ = players
 		std::vector< std::vector <int> > board;
 		int h;
 		int w;
 
-        //current player is always > 0
-        int currentPlayer;
+		int currentPlayer; //1 = white, 10 = black
 		int players;
 
         //arguments are not ready to be used, only use default

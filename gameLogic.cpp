@@ -18,12 +18,7 @@ Game::Game( int numPlayers, int height, int width )
 		board.push_back( row );
 	}
 
-	currentPlayer = 1;
-
-	board[ ( h / 2 ) - 1 ][ ( w / 2 ) - 1 ] = 1;
-    board[ ( h / 2 ) - 1 ][ ( w / 2 ) ] = 2;
-    board[ ( h / 2 ) ][ ( w / 2 ) - 1 ] = 2;
-    board[ ( h / 2 ) ][ ( w / 2 ) ] = 1;
+	currentPlayer = 10;
 }
 
 /*=====================
@@ -50,7 +45,7 @@ bool Game::isValidMove( int x, int y )
     //is it empty?
     if   ( ( x >= w ) || ( x < 0 )
         || ( y >= h ) || ( y < 0 )
-        || ( board[y][x] != 0 ) )
+        || ( board[x][y] != 0 ) )
         return false;
 
     //check y directions
@@ -83,7 +78,7 @@ bool Game::isValidMove( int x, int y )
             }
 
             //if adjacent tile is owned by opponent
-            if( ( board[y + vy][x + vx] != currentPlayer) && ( board[y + vy][x + vx] != 0 ) )
+            if( ( board[x + vx][y + vy] != currentPlayer) && ( board[x + vx][y + vy] != 0 ) )
             {
                 if ( checkDirection( x, y, vx, vy ) )
                     return true;
@@ -105,9 +100,9 @@ bool Game::checkDirection( int x, int y, int vx, int vy )
         x += vx;
         y += vy;
 
-        if( board[y][x] == 0 )
+        if( board[x][y] == 0 )
             return false;
-        if( board[y][x] == currentPlayer )
+        if( board[x][y] == currentPlayer )
             return true;
     }
 
@@ -118,22 +113,25 @@ bool Game::makeMove( int x, int y )
 {
     if( !isValidMove( x, y ) )
         return false;
+	std::cout << "Making move\n";
 
     //find tiles to flip
     std::vector< Vector2i > converted;
     converted = getConvertedTiles( x, y );
 
     //flip tiles
-    board[y][x] = currentPlayer;
+    board[x][y] = currentPlayer;
     for( int n = 0; n < converted.size(); n++ )
     {
-        board[ converted[n].y ][ converted[n].x ] = currentPlayer;
+        board[ converted[n].x ][ converted[n].y ] = currentPlayer;
     }
 
-    if( currentPlayer < players )
-        currentPlayer++;
+    if( currentPlayer == 1 )
+        currentPlayer = 10;
     else
         currentPlayer = 1;
+	getMoves();
+	return true;
 }
 
 void Game::resetGame()
@@ -197,7 +195,17 @@ std::vector< Vector2i > Game::getMoves()
                 moves.push_back( Vector2i( i, n ) );
         }
     }
-
+	int ind = 0;
+	std::cout << "Turn: ";
+	if (currentPlayer == 1)
+		std::cout << "White - Moves: ";
+	else
+		std::cout << "Black - Moves: ";
+	while (ind < moves.size()) {
+		std::cout << "(" <<  moves[ind].x << ", " << moves[ind].y << ") ";
+		ind++;
+	}
+	std::cout << std::endl;
     return moves;
 }
 
@@ -219,7 +227,7 @@ std::vector< Vector2i > Game::getConvertedTiles( int x, int y )
                 posX += vx;
                 posY += vy;
 
-                if( ( board[posY][posX] == currentPlayer ) || ( board[posY][posX] == 0 ) )
+                if( ( board[posX][posY] == currentPlayer ) || ( board[posX][posY] == 0 ) )
                     continue;
             }
 
@@ -229,12 +237,12 @@ std::vector< Vector2i > Game::getConvertedTiles( int x, int y )
             {
                 posX += vx;
                 posY += vy;
-                if( board[posY][posX] == 0 )
+                if( board[posX][posY] == 0 )
                 {
                     break;
                 }
 
-                else if( board[posY][posX] == currentPlayer )
+                else if( board[posX][posY] == currentPlayer )
                 {
                     //add all from (x, y) to (posX, posY)
                     int pos2X = x + vx;
@@ -251,10 +259,14 @@ std::vector< Vector2i > Game::getConvertedTiles( int x, int y )
         }
     }
 
+	std::cout << "Tiles converted: ";
+
     for( int n = 0; n < convertedTiles.size(); n++ )
     {
-        std::cout << convertedTiles[n].x << ", " << convertedTiles[n].y << "\n";
+        std::cout << "(" << convertedTiles[n].x << ", " << convertedTiles[n].y << ") ";
     }
+
+	std::cout << std::endl;
 
     return convertedTiles;
 
