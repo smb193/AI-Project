@@ -130,7 +130,14 @@ bool Game::makeMove( int x, int y )
         currentPlayer = 10;
     else
         currentPlayer = 1;
-	getMoves();
+	if (getMoves().size() == 0) {
+		if (currentPlayer == 1)
+			currentPlayer = 10;
+		else
+			currentPlayer = 1;
+		std::cout << "No available moves, player passes turn\n";
+		getMoves();
+	}
 	return true;
 }
 
