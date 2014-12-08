@@ -27,7 +27,7 @@ class ReversiAI
         //pruning functions
         bool checkCorners();
         bool checkOpenings();
-        void greedyApproach();
+        Vector2i greedyApproach();
 };
 
 #endif

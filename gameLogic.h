@@ -48,7 +48,8 @@ class Game
 		std::vector< Vector2i > getConvertedTiles( int x, int y );
 		int getNumConverted( int x, int y );
 
-
+		//called to display scores and current player's available moves.
+		void printScoresMoves(); 
 };
 
 #endif

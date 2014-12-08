@@ -12,8 +12,9 @@ Vector2i ReversiAI::takeTurn()
     //get list of available moves
     possibleMoves = game->getMoves();
 
-    if( possibleMoves.empty() )
-        return Vector2i(-1, -1 );
+	if (possibleMoves.empty()) {
+		return Vector2i(-1, -1);
+	}
 
     bestMoves = possibleMoves; //list to prune
     inOpening = true;
@@ -21,7 +22,10 @@ Vector2i ReversiAI::takeTurn()
     //check for corners
     if( difficulty >= 1 )
     {
-        checkCorners();
+		if (checkCorners()) 
+		{
+		
+		}
     }
 
     //advanced heuristics
@@ -36,7 +40,7 @@ Vector2i ReversiAI::takeTurn()
     //simple heuristics
     if( difficulty == 1 )
     {
-        greedyApproach();
+        return greedyApproach();
     }
 
     //pick random remaining move
@@ -60,8 +64,24 @@ Vector2i ReversiAI::takeTurn()
 ======================*/
 
 //look for the moves that will convert the most pieces
-void ReversiAI::greedyApproach()
+Vector2i ReversiAI::greedyApproach()
 {
+	Vector2i greedMove(0, 0);
+	int greedCount = 0;
+	int tempGreed;
+	for (int i = 0; i < bestMoves.size(); i++) {
+		tempGreed = game->getConvertedTiles(bestMoves[i].x, bestMoves[i].y).size();
+		if (greedCount < tempGreed) {
+			greedCount = tempGreed;
+			greedMove = bestMoves[i];
+		}
+		/*if (greedCount == tempGreed) {
+			if (rand() % 2)
+				greedMove = bestMoves[i];
+		}*/
+	}
+	game->makeMove(greedMove.x, greedMove.y);
+	return greedMove;
 }
 
 //if corners are available, throw out everything except them

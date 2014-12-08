@@ -113,7 +113,6 @@ bool Game::makeMove( int x, int y )
 {
     if( !isValidMove( x, y ) )
         return false;
-	std::cout << "Making move\n";
 
     //find tiles to flip
     std::vector< Vector2i > converted;
@@ -135,7 +134,7 @@ bool Game::makeMove( int x, int y )
 			currentPlayer = 10;
 		else
 			currentPlayer = 1;
-		std::cout << "No available moves, player passes turn\n";
+		std::cout << "\nNo available moves, player passes turn\n";
 		getMoves();
 	}
 	return true;
@@ -202,17 +201,7 @@ std::vector< Vector2i > Game::getMoves()
                 moves.push_back( Vector2i( i, n ) );
         }
     }
-	int ind = 0;
-	std::cout << "Turn: ";
-	if (currentPlayer == 1)
-		std::cout << "White - Moves: ";
-	else
-		std::cout << "Black - Moves: ";
-	while (ind < moves.size()) {
-		std::cout << "(" <<  moves[ind].x << ", " << moves[ind].y << ") ";
-		ind++;
-	}
-	std::cout << std::endl;
+
     return moves;
 }
 
@@ -332,4 +321,23 @@ int Game::getNumConverted( int x, int y )
     }
     return numConverted;
 
+}
+
+void Game::printScoresMoves() {
+	std::cout << "========SCORE========\n";
+	std::cout << "Black: " << getScore(10) << "   ";
+	std::cout << "White: " << getScore(1) << "\n\n";
+	int ind = 0;
+
+	std::vector< Vector2i >moves = getMoves();
+	std::cout << "Turn: ";
+	if (currentPlayer == 1)
+		std::cout << "White - Moves: ";
+	else
+		std::cout << "Black - Moves: ";
+	while (ind < moves.size()) {
+		std::cout << "(" << moves[ind].x << ", " << moves[ind].y << ") ";
+		ind++;
+	}
+	std::cout << "\n\n";
 }

@@ -11,14 +11,20 @@ const GLdouble X = 480, Y = 481; // Size of game window
 const GLfloat BACKGROUND[3] = { 0.0f, 0.5f, 0.0f }; // Color for background of board
 const GLfloat OUTLINE[3] = { 0.0f, 1.0f, 0.0f }; // Color of grid outline
 Game board; // Array state representation of game board
-ReversiAI gameAI( &board, 0 ); //Handles the AI's moves
+ReversiAI gameAI(&board, 0); //Handles the AI's moves
 int turn; // Represent whose turn it is
 
 void gameStart() { //initializes game board with center four pieces
 	board = Game();
+	int diff;
+	do {
+		std::cout << "Select a difficulty (0 == random, 1 == greedy, 2 == advanced): ";
+		std::cin >> diff;
+	} while (diff < 0 && diff > 2);
+	gameAI.difficulty = diff;
 	board.board[3][3] = board.board[4][4] = BLACK; // NE and SW are black
 	board.board[3][4] = board.board[4][3] = WHITE; // NW and SE are white
-	board.getMoves();
+	board.printScoresMoves();
 }
 
 void init() {
@@ -111,11 +117,12 @@ void mouse(int button, int state, int x, int y) {
 		if (board.board[indX][indY] == 0) {
             if(board.makeMove(indX, indY))
             {
-                std::cout << "\nAI's turn:\n";
+				board.printScoresMoves();
                 Vector2i aiMove = gameAI.takeTurn();
                 std::cout << "AI's move: (" << aiMove.x << ", " << aiMove.y << ")\n";
-
                 std::cout << "\n";
+
+				board.printScoresMoves();
             }
 
 		}
