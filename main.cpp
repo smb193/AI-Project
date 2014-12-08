@@ -115,14 +115,17 @@ void mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) { // Detects array position based on where mouse is left-clicked
 		std::cout << "Clicked on: (" << indX << ", " << indY << ")\n";
 		if (board.board[indX][indY] == 0) {
-            if(board.makeMove(indX, indY))
+			int current = board.currentPlayer;
+			if(board.makeMove(indX, indY))
             {
 				board.printScoresMoves();
-                Vector2i aiMove = gameAI.takeTurn();
-                std::cout << "AI's move: (" << aiMove.x << ", " << aiMove.y << ")\n";
-                std::cout << "\n";
+				if (current != board.currentPlayer) {
+					Vector2i aiMove = gameAI.takeTurn();
+					std::cout << "AI's move: (" << aiMove.x << ", " << aiMove.y << ")\n";
+					std::cout << "\n";
 
-				board.printScoresMoves();
+					board.printScoresMoves();
+				}
             }
 
 		}

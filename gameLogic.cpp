@@ -135,7 +135,6 @@ bool Game::makeMove( int x, int y )
 		else
 			currentPlayer = 1;
 		std::cout << "\nNo available moves, player passes turn\n";
-		getMoves();
 	}
 	return true;
 }
