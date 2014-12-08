@@ -1,6 +1,7 @@
 #include <Windows.h> // Note, this code only compiles on Windows platforms.
 #include <GL\glut.h>
 #include "gameLogic.h"
+#include "revAI.h"
 #include <iostream>
 
 const int BLACK = 10; // representation for black player
@@ -10,6 +11,7 @@ const GLdouble X = 480, Y = 481; // Size of game window
 const GLfloat BACKGROUND[3] = { 0.0f, 0.5f, 0.0f }; // Color for background of board
 const GLfloat OUTLINE[3] = { 0.0f, 1.0f, 0.0f }; // Color of grid outline
 Game board; // Array state representation of game board
+ReversiAI gameAI( &board, 0 ); //Handles the AI's moves
 int turn; // Represent whose turn it is
 
 void gameStart() { //initializes game board with center four pieces
@@ -107,7 +109,15 @@ void mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) { // Detects array position based on where mouse is left-clicked
 		std::cout << "Clicked on: (" << indX << ", " << indY << ")\n";
 		if (board.board[indX][indY] == 0) {
-			board.makeMove(indX, indY);
+            if(board.makeMove(indX, indY))
+            {
+                std::cout << "\nAI's turn:\n";
+                Vector2i aiMove = gameAI.takeTurn();
+                std::cout << "AI's move: (" << aiMove.x << ", " << aiMove.y << ")\n";
+
+                std::cout << "\n";
+            }
+
 		}
 	}
 	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) { // Resets board if right-clicked

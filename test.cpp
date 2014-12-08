@@ -1,4 +1,5 @@
 #include "gameLogic.h"
+#include "revAI.h"
 #include <iostream>
 
 void printMoves( Game & g );
@@ -7,6 +8,7 @@ void printBoard( const Game & g );
 int main()
 {
     Game game;
+    ReversiAI gameAI( &game, 0 );
 
     /*
     if( game.isValidMove( 3, 5 ) )
@@ -15,7 +17,11 @@ int main()
         std::cout << "No\n";
     */
 
-    printBoard( game );
+    game.board[3][3] = 1;
+    game.board[3][4] = 2;
+    game.board[4][3] = 2;
+    game.board[4][4] = 1;
+
 
     bool quit = false;
     while( !quit )
@@ -32,6 +38,9 @@ int main()
             break;
 
         game.makeMove ( x, y );
+
+        gameAI.takeTurn();
+        printBoard( game );
 
         std::cout << "\nScore:\n"
             << "Player 1: " << game.getScore( 1 ) << "\n"

@@ -259,6 +259,7 @@ std::vector< Vector2i > Game::getConvertedTiles( int x, int y )
         }
     }
 
+    /*
 	std::cout << "Tiles converted: ";
 
     for( int n = 0; n < convertedTiles.size(); n++ )
@@ -267,7 +268,61 @@ std::vector< Vector2i > Game::getConvertedTiles( int x, int y )
     }
 
 	std::cout << std::endl;
+    */
 
     return convertedTiles;
+
+}
+
+int Game::getNumConverted( int x, int y )
+{
+    int numConverted = 0;
+
+    for( int vy = -1; vy < 2; vy++ )
+    {
+        for( int vx = -1; vx < 2; vx++ )
+        {
+            int posX = x;
+            int posY = y;
+
+            //check adjacent tile in current direction
+            if(    ( ( posX + vx ) < w ) && ( ( posX + vx ) >= 0 )
+                && ( ( posY + vy ) < h ) && ( ( posY + vy ) >= 0 ) )
+            {
+                posX += vx;
+                posY += vy;
+
+                if( ( board[posX][posY] == currentPlayer ) || ( board[posX][posY] == 0 ) )
+                    continue;
+            }
+
+            //check remaining tiles
+            while( ( ( posX + vx ) < w ) && ( ( posX + vx ) >= 0 )
+                && ( ( posY + vy ) < h ) && ( ( posY + vy ) >= 0 ) )
+            {
+                posX += vx;
+                posY += vy;
+                if( board[posX][posY] == 0 )
+                {
+                    break;
+                }
+
+                else if( board[posX][posY] == currentPlayer )
+                {
+                    //add all from (x, y) to (posX, posY)
+                    int pos2X = x + vx;
+                    int pos2Y = y + vy;
+                    while( ( ( pos2X - posX ) != 0 ) || ( ( pos2Y - posY ) != 0 ) )
+                    {
+                        numConverted++;
+
+                        pos2X += vx;
+                        pos2Y += vy;
+                    }
+                }
+            }
+        }
+    }
+    return numConverted;
 
 }

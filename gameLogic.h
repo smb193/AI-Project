@@ -1,3 +1,6 @@
+#ifndef GAMELOGIC_H
+#define	GAMELOGIC_H
+
 #include <vector>
 #include <algorithm>
 
@@ -17,7 +20,7 @@ struct Vector2i
 class Game
 {
 	public:
-		//board[x][7], 0 = empty, 1+ = players
+		//board[x][y], 0 = empty, 1+ = players
 		std::vector< std::vector <int> > board;
 		int h;
 		int w;
@@ -43,6 +46,9 @@ class Game
 		int getScore( int player );
 		std::vector< Vector2i > getMoves();
 		std::vector< Vector2i > getConvertedTiles( int x, int y );
+		int getNumConverted( int x, int y );
 
 
 };
+
+#endif
