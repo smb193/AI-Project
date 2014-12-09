@@ -21,9 +21,9 @@ Game::Game( int numPlayers, int height, int width )
 	currentPlayer = 10;
 }
 
-Game::Game( const Game & other ) :
-    players( other.players), h(other.h), w(other.w), board(other.board),
-    currentPlayer(other.currentPlayer)
+Game::Game(const Game & other) :
+players(other.players), h(other.h), w(other.w), board(other.board),
+currentPlayer(other.currentPlayer)
 {
 
 }
@@ -127,6 +127,7 @@ bool Game::makeMove( int x, int y )
 
     //flip tiles
     board[x][y] = currentPlayer;
+	allMoves.push_back(Vector2i(x, y));
     for( int n = 0; n < converted.size(); n++ )
     {
         board[ converted[n].x ][ converted[n].y ] = currentPlayer;
@@ -331,18 +332,18 @@ int Game::getNumConverted( int x, int y )
 
 int Game::getNumMoves()
 {
-    int numMoves = 0;
+	int numMoves = 0;
 
-    for( int n = 0; n < h; n++ )
-    {
-        for( int i = 0; i < w; i++ )
-        {
-            if ( isValidMove( i, n ) )
-                numMoves++;
-        }
-    }
+	for (int n = 0; n < h; n++)
+	{
+		for (int i = 0; i < w; i++)
+		{
+			if (isValidMove(i, n))
+				numMoves++;
+		}
+	}
 
-    return numMoves;
+	return numMoves;
 }
 
 void Game::printScoresMoves() {

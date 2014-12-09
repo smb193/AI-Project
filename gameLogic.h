@@ -11,14 +11,13 @@ struct Vector2i
 	int y;
 
 	//only to be used by the AI
-    int score;
+	int score;
 
-	Vector2i( int xi, int yi ) : x(xi), y(yi), score(0){}
+	Vector2i(int xi, int yi) : x(xi), y(yi), score(0){}
 
 	Vector2i( const Vector2i & other )
-        : x( other.x ), y(other.y), score(other.score ) {}
+        : x( other.x ), y(other.y), score(other.score) {}
 };
-
 
 class Game
 {
@@ -27,6 +26,7 @@ class Game
 		std::vector< std::vector <int> > board;
 		int h;
 		int w;
+		std::vector<Vector2i> allMoves;
 
 		int currentPlayer; //1 = white, 10 = black
 		int players;
@@ -34,7 +34,7 @@ class Game
         //arguments are not ready to be used, only use default
 		Game( int numPlayers = 2, int height = 8, int width = 8 );
 
-        Game( const Game & other );
+		Game(const Game & other);
 
 		bool isBoardFilled();
 		//only uses current player to check
@@ -55,7 +55,7 @@ class Game
 		int getNumMoves();
 
 		//called to display scores and current player's available moves.
-		void printScoresMoves();
+		void printScoresMoves(); 
 };
 
 #endif

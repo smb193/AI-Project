@@ -21,7 +21,7 @@ void gameStart() { //initializes game board with center four pieces
 		std::cout << "Select a difficulty (0 == random, 1 == greedy, 2 == advanced): ";
 		std::cin >> diff;
 	} while (diff < 0 && diff > 2);
-	gameAI.difficulty = diff;
+	gameAI = ReversiAI(&board, diff);
 	board.board[3][3] = board.board[4][4] = BLACK; // NE and SW are black
 	board.board[3][4] = board.board[4][3] = WHITE; // NW and SE are white
 	board.printScoresMoves();
