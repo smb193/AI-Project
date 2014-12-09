@@ -22,9 +22,9 @@ Vector2i ReversiAI::takeTurn()
     //check for corners
     if( difficulty >= 1 )
     {
-		if (checkCorners()) 
+		if (checkCorners())
 		{
-		
+
 		}
     }
 
@@ -87,6 +87,23 @@ Vector2i ReversiAI::greedyApproach()
 //if corners are available, throw out everything except them
 bool ReversiAI::checkCorners()
 {
+    std::vector<Vector2i> availableCorners;
+
+    for( int n = 0; n < bestMoves.size(); n++ )
+    {
+        if( ( ( bestMoves[n].x == 0 ) && ( bestMoves[n].y == 0 ) ) ||
+            ( ( bestMoves[n].x == 0 ) && ( bestMoves[n].y == 7 ) ) ||
+            ( ( bestMoves[n].x == 7 ) && ( bestMoves[n].y == 0 ) ) ||
+            ( ( bestMoves[n].x == 7 ) && ( bestMoves[n].y == 7 ) ) )
+        {
+            availableCorners.push_back( bestMoves[n] );
+
+        }
+    }
+
+    if( !availableCorners.empty() )
+        bestMoves = availableCorners;
+
     return false;
 }
 
