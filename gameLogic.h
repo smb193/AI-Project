@@ -34,6 +34,8 @@ class Game
         //arguments are not ready to be used, only use default
 		Game( int numPlayers = 2, int height = 8, int width = 8 );
 
+        Game( const Game & other );
+
 		bool isBoardFilled();
 		//only uses current player to check
 		bool isValidMove( int x, int y );
@@ -50,6 +52,7 @@ class Game
 		std::vector< Vector2i > getMoves();
 		std::vector< Vector2i > getConvertedTiles( int x, int y );
 		int getNumConverted( int x, int y );
+		int getNumMoves();
 
 		//called to display scores and current player's available moves.
 		void printScoresMoves();

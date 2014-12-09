@@ -4,6 +4,7 @@
 #include "gameLogic.h"
 #include <string>
 #include <time.h>
+#include <iostream>
 
 const int weights[8][8] =
     {
@@ -17,6 +18,10 @@ const int weights[8][8] =
         {99, -8 ,  8,  6,  6,  8, -8 , 99}
     };
 
+const double WEIGHT_FACTOR = 1;
+const double MOBILITY_FACTOR = 5;
+
+
 class ReversiAI
 {
     private:
@@ -25,6 +30,13 @@ class ReversiAI
         std::vector<Vector2i> bestMoves;
 
         bool inOpening;
+
+        //pruning functions
+        bool checkCorners();
+        bool checkOpenings();
+        bool checkScores();
+        bool checkMobility();
+        Vector2i greedyApproach();
 
     public:
         Game * game;
@@ -35,12 +47,6 @@ class ReversiAI
         ReversiAI( Game * g, int diff = 0 );
 
         Vector2i takeTurn();
-
-        //pruning functions
-        bool checkCorners();
-        bool checkOpenings();
-        bool checkWeights();
-        Vector2i greedyApproach();
 };
 
 #endif

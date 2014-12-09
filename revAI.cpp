@@ -15,7 +15,7 @@ Vector2i ReversiAI::takeTurn()
     //apply weights
     for( int n = 0; n < possibleMoves.size(); n++ )
     {
-        possibleMoves[n].score = weights[possibleMoves[n].x][possibleMoves[n].y];
+        possibleMoves[n].score = weights[possibleMoves[n].x][possibleMoves[n].y] * WEIGHT_FACTOR;
     }
 
 	if (possibleMoves.empty()) {
@@ -41,6 +41,9 @@ Vector2i ReversiAI::takeTurn()
         {
             inOpening = false;
         }
+
+        checkMobility();
+        checkScores();
     }
 
     //simple heuristics
@@ -119,28 +122,54 @@ bool ReversiAI::checkOpenings()
     return false;
 }
 
-bool ReversiAI::checkWeights()
+bool ReversiAI::checkScores()
 {
-    int averageScore = 0;
+    double averageScore = 0;
+
+    //std::cout << "Scores: \n";
 
     //find the average score
     for( int n = 0; n < bestMoves.size(); n++ )
     {
+        //std::cout << bestMoves[n].score << ", ";
         averageScore += bestMoves[n].score;
     }
 
-    averageScore /= bestMoves.size();
+    averageScore = averageScore / bestMoves.size();
+
+
+    //std::cout << "\nAverage Score: " << averageScore << "\n";
+    //std::cout << "Moves pruned due to score: \n";
 
     //remove all below average
     for( int n = 0; n < bestMoves.size(); n++ )
     {
-        if( bestMoves[n].score < averageScore )
+        if( bestMoves[n].score <= averageScore )
         {
+            //std::cout << "(" << (*(bestMoves.begin() + n ) ).x << ", " <<
+            //    (*(bestMoves.begin() + n ) ).y << "), ";
+
             bestMoves.erase( bestMoves.begin() + n );
 
             n--;
         }
     }
+    //std::cout << "\n";
 
     return true;
+}
+
+//checks how a move affects opponents mobility next turn
+bool ReversiAI::checkMobility()
+{
+    for( int n = 0; n < bestMoves.size(); n++ )
+    {
+        //Get game state next turn with current move
+        Game nextTurn = *game;
+        nextTurn.makeMove( bestMoves[n].x, bestMoves[n].y );
+
+        bestMoves[n].score -= nextTurn.getNumMoves() * MOBILITY_FACTOR;
+        std::cout << nextTurn.getNumMoves() << ", ";
+    }
+    std::cout << "\n";
 }

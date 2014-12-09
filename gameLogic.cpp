@@ -21,6 +21,13 @@ Game::Game( int numPlayers, int height, int width )
 	currentPlayer = 10;
 }
 
+Game::Game( const Game & other ) :
+    players( other.players), h(other.h), w(other.w), board(other.board),
+    currentPlayer(other.currentPlayer)
+{
+
+}
+
 /*=====================
     General Functions
 ======================*/
@@ -320,6 +327,22 @@ int Game::getNumConverted( int x, int y )
     }
     return numConverted;
 
+}
+
+int Game::getNumMoves()
+{
+    int numMoves = 0;
+
+    for( int n = 0; n < h; n++ )
+    {
+        for( int i = 0; i < w; i++ )
+        {
+            if ( isValidMove( i, n ) )
+                numMoves++;
+        }
+    }
+
+    return numMoves;
 }
 
 void Game::printScoresMoves() {
