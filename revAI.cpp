@@ -12,6 +12,12 @@ Vector2i ReversiAI::takeTurn()
     //get list of available moves
     possibleMoves = game->getMoves();
 
+    //apply weights
+    for( int n = 0; n < possibleMoves.size(); n++ )
+    {
+        possibleMoves[n].score = weights[possibleMoves[n].x][possibleMoves[n].y];
+    }
+
 	if (possibleMoves.empty()) {
 		return Vector2i(-1, -1);
 	}
@@ -111,4 +117,30 @@ bool ReversiAI::checkCorners()
 bool ReversiAI::checkOpenings()
 {
     return false;
+}
+
+bool ReversiAI::checkWeights()
+{
+    int averageScore = 0;
+
+    //find the average score
+    for( int n = 0; n < bestMoves.size(); n++ )
+    {
+        averageScore += bestMoves[n].score;
+    }
+
+    averageScore /= bestMoves.size();
+
+    //remove all below average
+    for( int n = 0; n < bestMoves.size(); n++ )
+    {
+        if( bestMoves[n].score < averageScore )
+        {
+            bestMoves.erase( bestMoves.begin() + n );
+
+            n--;
+        }
+    }
+
+    return true;
 }

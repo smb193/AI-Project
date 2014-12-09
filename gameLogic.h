@@ -10,10 +10,13 @@ struct Vector2i
 	int x;
 	int y;
 
-	Vector2i( int xi, int yi ) : x(xi), y(yi){}
+	//only to be used by the AI
+    int score;
+
+	Vector2i( int xi, int yi ) : x(xi), y(yi), score(0){}
 
 	Vector2i( const Vector2i & other )
-        : x( other.x ), y(other.y) {}
+        : x( other.x ), y(other.y), score(other.score ) {}
 };
 
 
@@ -49,7 +52,7 @@ class Game
 		int getNumConverted( int x, int y );
 
 		//called to display scores and current player's available moves.
-		void printScoresMoves(); 
+		void printScoresMoves();
 };
 
 #endif
