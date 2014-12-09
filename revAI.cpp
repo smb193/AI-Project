@@ -169,7 +169,7 @@ bool ReversiAI::checkMobility()
         nextTurn.makeMove( bestMoves[n].x, bestMoves[n].y );
 
         bestMoves[n].score -= nextTurn.getNumMoves() * MOBILITY_FACTOR;
-        std::cout << nextTurn.getNumMoves() << ", ";
+        //std::cout << nextTurn.getNumMoves() << ", ";
     }
-    std::cout << "\n";
+    //std::cout << "\n";
 }
