@@ -21,10 +21,22 @@ void gameStart() { //initializes game board with center four pieces
 		std::cout << "Select a difficulty (0 == random, 1 == greedy, 2 == advanced): ";
 		std::cin >> diff;
 	} while (diff < 0 && diff > 2);
+	int choice;
+	do {
+		std::cout << "Who will go first? (0 == You, 1 == AI): ";
+		std::cin >> choice;
+	} while (choice != 0 && choice != 1);
 	gameAI = ReversiAI(&board, diff);
 	board.board[3][3] = board.board[4][4] = BLACK; // NE and SW are black
 	board.board[3][4] = board.board[4][3] = WHITE; // NW and SE are white
 	board.printScoresMoves();
+	if (choice == 1) {
+		Vector2i aiMove = gameAI.takeTurn();
+		std::cout << "AI's move: (" << aiMove.x << ", " << aiMove.y << ")\n";
+		std::cout << "\n";
+
+		board.printScoresMoves();
+	}
 }
 
 void init() {
